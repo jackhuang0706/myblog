@@ -126,6 +126,11 @@ a {
   margin-right: 1em;
 }
 
+.post-item-extra>.date::before, .post-meta>.date::before {
+  content: "Updated: ";
+  margin-right: 0.5em;
+}
+
 .post-item-extra>.tags, .post-meta>.tags {
   display: flex;
 }
