@@ -131,10 +131,16 @@ a {
 }
 
 .read-more {
-  padding: 0 4px;
-  color: var(--font-color);
+  color: var(--font-color-secondary);
+  display: inline-block;
+  margin-top: 10px;
+  font-weight: 600;
 }
-
+.read-more:hover {
+  text-decoration: underline;
+  font-weight: 700;
+}
+/*
 .read-more:before,
 .read-more:after {
   display: inline-block;
@@ -154,10 +160,12 @@ a {
   transform: translateX(4px);
   transition: transform ease-in-out 0.25s;
 }
-
+*/
+.tags>.tag-item {
+  color: var(--font-color);
+}
 .tags>.tag-item::before {
-  content: "⌗";
-  color: var(--font-color-extra);
+  content: "#️ ";
   margin-left: 0.5em;
 }
 
