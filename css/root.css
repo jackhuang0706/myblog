@@ -8,7 +8,7 @@
 
   --color-hr: #ddd;
   --color-link: #4078F2;
-  --color-background: #fff;
+  --color-background: #F9F9F9;
 
   /* 激活与未激活状态 */
   --color-unactive: #eeeeee;
@@ -21,8 +21,8 @@
   /* 文章颜色 */
   --color-post-content: #333333;
   /* code 背景色 */
-  --color-background-code: #f8f8f8;
-  --color-border-code: #e7eaed;
+  --color-background-code: #F0F0F0;
+  --color-border-code: #D2D2D2;
 
   --color-hashtag: #51525d;
 

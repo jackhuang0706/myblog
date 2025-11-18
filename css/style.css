@@ -126,8 +126,8 @@ a {
   margin-right: 1em;
 }
 
-.post-item-extra>.date::before, .post-meta>.date::before {
-  content: "Updated: ";
+.post-item-extra>.date::before {
+  content: "Last Updated: ";
   margin-right: 0.5em;
 }
 
