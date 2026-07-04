@@ -1,0 +1,75 @@
+@import 'katex/dist/katex.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
+  /* 首頁背景滿版（100vw）時避免出現水平捲軸 */
+  overflow-x: clip;
+}
+
+/* KaTeX 區塊式數學過寬時可橫向捲動 */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+/* ===== 首頁動畫與科技感背景 ===== */
+
+/* 進場：淡入上移 */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.7s ease-out forwards;
+}
+
+/* 背景光暈漂浮 */
+@keyframes blob {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -50px) scale(1.15);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.9);
+  }
+}
+
+.animate-blob {
+  animation: blob 12s ease-in-out infinite;
+}
+
+/* 科技感格線背景 */
+.bg-tech-grid {
+  background-image:
+    linear-gradient(to right, rgb(99 102 241 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(99 102 241 / 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-blob {
+    animation: none;
+    opacity: 1;
+  }
+}
