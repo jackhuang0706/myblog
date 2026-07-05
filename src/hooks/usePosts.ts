@@ -6,6 +6,8 @@ import type { Post } from '../types'
 interface UsePostsOptions {
   /** true：含草稿（admin 用）；false：只取已發布 */
   includeDrafts?: boolean
+  /** 指定語言時只取該語言的文章（讀者頁面依介面語言過濾；admin 不傳，顯示全部） */
+  lang?: string
 }
 
 // 資料表若是舊版 schema（缺 tags/excerpt 欄位），撈回的資料會沒有這兩個屬性，
@@ -27,7 +29,7 @@ function isMissingColumnError(error: { code?: string; message?: string }): boole
   )
 }
 
-export function usePosts({ includeDrafts = false }: UsePostsOptions = {}) {
+export function usePosts({ includeDrafts = false, lang }: UsePostsOptions = {}) {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -36,17 +38,19 @@ export function usePosts({ includeDrafts = false }: UsePostsOptions = {}) {
     setLoading(true)
     setError(null)
     if (!supabase) {
-      setPosts(includeDrafts ? [] : samplePosts)
+      const fallback = includeDrafts ? [] : samplePosts
+      setPosts(lang ? fallback.filter((p) => p.lang === lang) : fallback)
       setLoading(false)
       return
     }
     let query = supabase.from('posts').select('*').order('created_at', { ascending: false })
     if (!includeDrafts) query = query.eq('published', true)
+    if (lang) query = query.eq('lang', lang)
     const { data, error } = await query
     if (error) setError(error.message)
     else setPosts((data ?? []).map(normalizePost))
     setLoading(false)
-  }, [includeDrafts])
+  }, [includeDrafts, lang])
 
   useEffect(() => {
     fetchPosts()

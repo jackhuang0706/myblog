@@ -19,8 +19,9 @@ function highlightKeyword(snippet: string, keyword: string) {
 }
 
 export default function SearchBar() {
-  const { t } = useI18n()
-  const { posts } = usePosts()
+  const { t, lang } = useI18n()
+  // 搜尋範圍同樣依介面語言過濾
+  const { posts } = usePosts({ lang })
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const wrapperRef = useRef<HTMLDivElement>(null)

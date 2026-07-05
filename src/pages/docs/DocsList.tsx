@@ -5,7 +5,8 @@ import { formatDate } from '../../lib/format'
 
 export default function DocsList() {
   const { t, lang } = useI18n()
-  const { posts, loading } = usePosts()
+  // 依介面語言過濾：中文介面只顯示中文文章，英文亦然
+  const { posts, loading } = usePosts({ lang })
 
   if (loading) return <p className="text-gray-500">{t('loading')}</p>
 
@@ -37,7 +38,7 @@ export default function DocsList() {
                     {post.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-700/20 dark:text-primary-100"
+                        className="text-xs font-medium text-primary-700 dark:text-primary-100"
                       >
                         #{tag}
                       </span>

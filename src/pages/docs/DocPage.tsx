@@ -58,7 +58,7 @@ export default function DocPage() {
             {post.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary-700 dark:bg-primary-700/20 dark:text-primary-100"
+                className="text-xs font-medium text-primary-700 dark:text-primary-100"
               >
                 #{tag}
               </span>

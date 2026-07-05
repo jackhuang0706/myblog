@@ -9,8 +9,8 @@ export default function Home() {
   return (
     // mx-[calc(50%-50vw)]：突破版面容器寬度限制，讓背景延伸到視窗兩側
     <section className="relative -my-8 mx-[calc(50%-50vw)] flex min-h-[calc(100vh-3.9rem)] items-center justify-center overflow-hidden px-4">
-      {/* 動態背景：漂浮漸層光暈 */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+      {/* 動態背景：漂浮漸層光暈。fixed 鋪滿整個視窗，讓下方透明的 footer 也共用同一片背景 */}
+      <div className="pointer-events-none fixed inset-0" aria-hidden="true">
         <div className="absolute inset-0 bg-tech-grid opacity-60 dark:opacity-30" />
         <div className="animate-blob absolute -left-24 top-1/4 h-80 w-80 rounded-full bg-cyan-400/30 blur-3xl dark:bg-cyan-500/20" />
         <div className="animate-blob absolute right-0 top-10 h-96 w-96 rounded-full bg-primary-500/25 blur-3xl [animation-delay:-4s] dark:bg-primary-600/20" />
