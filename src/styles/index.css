@@ -14,6 +14,18 @@ body {
   overflow-x: clip;
 }
 
+/* ===== 行內程式碼 =====
+   typography 外掛預設會用 ::before/::after 在 code 前後補上反引號字元，
+   看起來就像 Markdown 沒有解析成功，移除並改為底色膠囊樣式 */
+.prose code::before,
+.prose code::after {
+  content: none;
+}
+
+.prose :not(pre) > code {
+  @apply rounded-md bg-gray-100 px-1.5 py-0.5 font-normal text-primary-700 dark:bg-gray-800 dark:text-primary-100;
+}
+
 /* KaTeX 區塊式數學過寬時可橫向捲動 */
 .katex-display {
   overflow-x: auto;
