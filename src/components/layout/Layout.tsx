@@ -9,7 +9,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <footer className="py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        © {new Date().getFullYear()} · Built with React + Tailwind + Supabase
+        © {new Date().getFullYear()} · fijjj
       </footer>
     </div>
   )

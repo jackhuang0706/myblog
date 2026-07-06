@@ -40,3 +40,4 @@ docs-site/
 - 在docs頁面預覽文章時，包含標題，新增日期，預覽內容，tags，其中預覽內容和tags在新增文章時可加（optional），如果沒有則預覽時該處留白。
 - admin界面刪除文章旁有一個修改的button
 - topbar 新增 新聞爬蟲 button，並連接到 newsprovider.fijjj.dev
+- footer 內容為 © 2026 · fijjj
