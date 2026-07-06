@@ -24,7 +24,8 @@ export default function Home() {
         <p className="animate-fade-up mt-8 text-lg text-gray-500 [animation-delay:150ms] dark:text-gray-400">
           {t('home_welcome')}
         </p>
-        <h1 className="animate-fade-up mt-2 bg-gradient-to-r from-cyan-500 via-primary-600 to-purple-500 bg-clip-text text-5xl font-extrabold tracking-tight text-transparent [animation-delay:300ms] sm:text-6xl">
+        {/* pb-3：bg-clip-text 的背景只蓋到元素框，需留 padding 讓 j、g 的下伸部也被漸層覆蓋 */}
+        <h1 className="animate-fade-up mt-2 bg-gradient-to-r from-cyan-500 via-primary-600 to-purple-500 bg-clip-text pb-3 text-5xl font-extrabold tracking-tight text-transparent [animation-delay:300ms] sm:text-6xl">
           Fijjj&apos;s Blog
         </h1>
         <p className="animate-fade-up mt-6 max-w-md text-gray-600 [animation-delay:450ms] dark:text-gray-300">

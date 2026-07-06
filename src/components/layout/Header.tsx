@@ -33,6 +33,14 @@ export default function Header() {
           <NavLink to="/timeline" className={navLinkClass}>
             {t('nav_timeline')}
           </NavLink>
+          <a
+            href="https://newsprovider.fijjj.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 transition hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+          >
+            {t('nav_news')} ↗
+          </a>
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <SearchBar />
