@@ -10,7 +10,7 @@ interface UsePostsOptions {
   lang?: string
 }
 
-// 資料表若是舊版 schema（缺 tags/excerpt 欄位），撈回的資料會沒有這兩個屬性，
+// 資料表若是舊版 schema（缺 tags/excerpt/views 欄位），撈回的資料會沒有這些屬性，
 // 前端直接使用 post.tags 會 crash，因此讀取後一律補上預設值。
 function normalizePost(row: unknown): Post {
   const post = row as Post
@@ -18,6 +18,7 @@ function normalizePost(row: unknown): Post {
     ...post,
     tags: Array.isArray(post.tags) ? post.tags : [],
     excerpt: post.excerpt ?? null,
+    views: typeof post.views === 'number' ? post.views : 0,
   }
 }
 
@@ -57,6 +58,19 @@ export function usePosts({ includeDrafts = false, lang }: UsePostsOptions = {}) 
   }, [fetchPosts])
 
   return { posts, loading, error, refresh: fetchPosts }
+}
+
+// 同一瀏覽 session 內每篇文章只累計一次，也避免 StrictMode 重複執行 effect 造成重複計數
+const viewedSlugs = new Set<string>()
+
+/** 讀者開啟文章時累計瀏覽數（fire-and-forget，失敗不影響閱讀） */
+export function incrementPostViews(slug: string): void {
+  if (!supabase || viewedSlugs.has(slug)) return
+  viewedSlugs.add(slug)
+  supabase.rpc('increment_post_views', { post_slug: slug }).then(({ error }) => {
+    // 資料庫尚未執行新版 schema.sql（缺 function）時靜默略過
+    if (error) console.warn('increment_post_views failed:', error.message)
+  })
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {

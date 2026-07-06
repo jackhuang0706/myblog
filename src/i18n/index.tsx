@@ -50,6 +50,11 @@ const translations = {
     admin_edit: '編輯',
     admin_empty: '還沒有任何文章，點「新增文章」開始撰寫。',
     admin_createdAt: '建立時間',
+    admin_views: '瀏覽數',
+    admin_heatmapTitle: '發布字數熱力圖（依發布日統計每日總字數）',
+    admin_heatmapUnit: '字',
+    admin_heatmapLess: '少',
+    admin_heatmapMore: '多',
     admin_autoTime: '建立與更新時間會自動記錄',
     admin_needSupabase: '尚未設定 Supabase。請複製 .env.example 為 .env 並填入金鑰，後台功能才能使用。',
     admin_migrationNeeded:
@@ -105,6 +110,11 @@ const translations = {
     admin_edit: 'Edit',
     admin_empty: 'No posts yet. Click "New Post" to start writing.',
     admin_createdAt: 'Created at',
+    admin_views: 'Views',
+    admin_heatmapTitle: 'Contribution Heatmap (words published per day)',
+    admin_heatmapUnit: 'words',
+    admin_heatmapLess: 'Less',
+    admin_heatmapMore: 'More',
     admin_autoTime: 'Creation and update times are recorded automatically',
     admin_needSupabase: 'Supabase is not configured. Copy .env.example to .env and fill in your keys to use the admin panel.',
     admin_migrationNeeded:

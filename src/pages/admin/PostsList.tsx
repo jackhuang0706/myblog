@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { usePosts, deletePost } from '../../hooks/usePosts'
 import { useI18n } from '../../i18n'
 import { formatDateTime } from '../../lib/format'
+import ContributionHeatmap from '../../components/admin/ContributionHeatmap'
 
 export default function PostsList() {
   const { t, lang } = useI18n()
@@ -27,6 +28,7 @@ export default function PostsList() {
           + {t('admin_newPost')}
         </Link>
       </div>
+      <ContributionHeatmap posts={posts} />
       {posts.length === 0 ? (
         <p className="text-gray-500">{t('admin_empty')}</p>
       ) : (
@@ -36,6 +38,7 @@ export default function PostsList() {
               <tr>
                 <th className="px-4 py-3 font-medium">{t('admin_title')}</th>
                 <th className="px-4 py-3 font-medium">{t('admin_status')}</th>
+                <th className="px-4 py-3 font-medium">{t('admin_views')}</th>
                 <th className="px-4 py-3 font-medium">{t('admin_createdAt')}</th>
                 <th className="px-4 py-3" />
               </tr>
@@ -62,6 +65,9 @@ export default function PostsList() {
                     >
                       {post.published ? t('admin_published') : t('admin_draft')}
                     </span>
+                  </td>
+                  <td className="whitespace-nowrap px-4 py-3 text-gray-500 dark:text-gray-400">
+                    {post.views.toLocaleString()}
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-gray-500 dark:text-gray-400">
                     {formatDateTime(post.created_at, lang)}

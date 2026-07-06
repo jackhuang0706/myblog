@@ -10,6 +10,7 @@ create table if not exists public.posts (
   tags text[] not null default '{}',
   excerpt text,
   published boolean not null default false,
+  views integer not null default 0,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -17,12 +18,15 @@ create table if not exists public.posts (
 -- 舊版資料表補欄位（新建立的資料表已包含，重複執行無害）
 alter table public.posts add column if not exists tags text[] not null default '{}';
 alter table public.posts add column if not exists excerpt text;
+alter table public.posts add column if not exists views integer not null default 0;
 
--- 更新時自動刷新 updated_at
+-- 更新時自動刷新 updated_at（僅瀏覽數累加不算內容更新，不刷新）
 create or replace function public.set_updated_at()
 returns trigger as $$
 begin
-  new.updated_at = now();
+  if (to_jsonb(new) - 'views' - 'updated_at') is distinct from (to_jsonb(old) - 'views' - 'updated_at') then
+    new.updated_at = now();
+  end if;
   return new;
 end;
 $$ language plpgsql;
@@ -64,6 +68,19 @@ create policy "Authenticated users can delete posts"
   on public.posts for delete
   to authenticated
   using (true);
+
+-- 瀏覽數累計：匿名訪客沒有 update 權限，改由 security definer function 累加，
+-- 且只允許 +1 已發布文章，避免被用來竄改其他欄位
+create or replace function public.increment_post_views(post_slug text)
+returns void as $$
+begin
+  update public.posts
+  set views = views + 1
+  where slug = post_slug and published = true;
+end;
+$$ language plpgsql security definer set search_path = public;
+
+grant execute on function public.increment_post_views(text) to anon, authenticated;
 
 -- 搜尋效能（關鍵字搜尋標題與內容）
 create index if not exists posts_title_content_idx

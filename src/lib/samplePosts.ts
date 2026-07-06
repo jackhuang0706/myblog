@@ -10,6 +10,7 @@ export const samplePosts: Post[] = [
     tags: ['公告', '入門'],
     excerpt: '網站功能總覽：Markdown、數學式、主題切換、搜尋與後台管理。',
     published: true,
+    views: 0,
     created_at: '2026-07-01T09:00:00Z',
     updated_at: '2026-07-01T09:00:00Z',
     content: `# 歡迎 👋
@@ -41,6 +42,7 @@ function greet(name: string) {
     tags: ['數學'],
     excerpt: null,
     published: true,
+    views: 0,
     created_at: '2026-07-02T14:30:00Z',
     updated_at: '2026-07-02T14:30:00Z',
     content: `# 尤拉公式
@@ -75,6 +77,7 @@ $$
     tags: [],
     excerpt: null,
     published: true,
+    views: 0,
     created_at: '2026-07-03T08:00:00Z',
     updated_at: '2026-07-03T08:00:00Z',
     content: `# Getting Started

@@ -7,6 +7,7 @@ export interface Post {
   tags: string[]
   excerpt: string | null
   published: boolean
+  views: number
   created_at: string
   updated_at: string
 }

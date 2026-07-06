@@ -41,3 +41,5 @@ docs-site/
 - admin界面刪除文章旁有一個修改的button
 - topbar 新增 新聞爬蟲 button，並連接到 newsprovider.fijjj.dev
 - footer 內容為 © 2026 · fijjj
+- 後台的文章管理顯示每篇文章的瀏覽數
+- 後台根據當天發布的總字數顯示 Contribution Heatmap

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getPostBySlug } from '../../hooks/usePosts'
+import { getPostBySlug, incrementPostViews } from '../../hooks/usePosts'
 import type { Post } from '../../types'
 import MarkdownRenderer from '../../components/docs/MarkdownRenderer'
 import TableOfContents from '../../components/docs/TableOfContents'
@@ -17,7 +17,10 @@ export default function DocPage() {
     if (!slug) return
     setLoading(true)
     getPostBySlug(slug)
-      .then(setPost)
+      .then((p) => {
+        setPost(p)
+        if (p) incrementPostViews(slug)
+      })
       .catch(() => setPost(null))
       .finally(() => setLoading(false))
   }, [slug])
