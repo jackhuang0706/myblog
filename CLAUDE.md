@@ -43,3 +43,4 @@ docs-site/
 - footer 內容為 © 2026 · fijjj
 - 後台的文章管理顯示每篇文章的瀏覽數
 - 後台根據當天發布的總字數顯示 Contribution Heatmap
+- topbar 新增 旅行紀錄 button，並連接到 travelrecorder.fijjj.dev
