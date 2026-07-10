@@ -21,26 +21,26 @@ export default function Home() {
         <div className="animate-fade-up">
           <Logo size={88} />
         </div>
-        <p className="animate-fade-up mt-8 text-lg text-gray-500 [animation-delay:150ms] dark:text-gray-400">
+        <p className="animate-fade-up mt-8 text-lg font-bold text-gray-500 [animation-delay:150ms] dark:text-gray-400">
           {t('home_welcome')}
         </p>
         {/* pb-3：bg-clip-text 的背景只蓋到元素框，需留 padding 讓 j、g 的下伸部也被漸層覆蓋 */}
         <h1 className="animate-fade-up mt-2 bg-gradient-to-r from-cyan-500 via-primary-600 to-purple-500 bg-clip-text pb-3 text-5xl font-extrabold tracking-tight text-transparent [animation-delay:300ms] sm:text-6xl">
           Fijjj&apos;s Blog
         </h1>
-        <p className="animate-fade-up mt-6 max-w-md text-gray-600 [animation-delay:450ms] dark:text-gray-300">
+        <p className="animate-fade-up mt-6 max-w-md font-bold text-gray-600 [animation-delay:450ms] dark:text-gray-300">
           {t('home_tagline')}
         </p>
         <div className="animate-fade-up mt-10 flex flex-wrap justify-center gap-4 [animation-delay:600ms]">
           <Link
             to="/docs"
-            className="rounded-xl bg-gradient-to-r from-cyan-500 to-primary-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-primary-500/25 transition hover:shadow-xl hover:shadow-primary-500/40 hover:brightness-110"
+            className="rounded-xl bg-gradient-to-r from-cyan-500 to-primary-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary-500/25 transition hover:shadow-xl hover:shadow-primary-500/40 hover:brightness-110"
           >
             {t('home_browseDocs')} →
           </Link>
           <Link
             to="/timeline"
-            className="rounded-xl border border-gray-300 bg-white/60 px-6 py-3 text-sm font-semibold backdrop-blur transition hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/60 dark:hover:text-primary-100"
+            className="rounded-xl border border-gray-300 bg-white/60 px-6 py-3 text-sm font-bold backdrop-blur transition hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/60 dark:hover:text-primary-100"
           >
             {t('home_viewTimeline')}
           </Link>

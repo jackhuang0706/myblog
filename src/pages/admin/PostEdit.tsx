@@ -5,14 +5,12 @@ import MarkdownEditor from '../../components/editor/MarkdownEditor'
 import { useI18n, languageNames } from '../../i18n'
 import type { Language } from '../../types'
 
-/** 由標題自動產生 slug（保留中日韓字元） */
+// 標題只允許中文、英文字母、數字與空格
+const TITLE_PATTERN = /^[\p{Script=Han}A-Za-z0-9\s]*$/u
+
+/** slug 由標題自動產生（不可自訂）：中文與數字照抄、英文轉小寫、空格以 - 連接 */
 function slugify(title: string): string {
-  return title
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, '-')
-    .replace(/^-+|-+$/g, '')
-    .slice(0, 80)
+  return title.trim().toLowerCase().replace(/\s+/g, '-')
 }
 
 export default function PostEdit() {
@@ -22,8 +20,6 @@ export default function PostEdit() {
   const { t } = useI18n()
 
   const [title, setTitle] = useState('')
-  const [slug, setSlug] = useState('')
-  const [slugTouched, setSlugTouched] = useState(false)
   const [content, setContent] = useState('')
   const [lang, setLang] = useState('zh')
   const [tagsText, setTagsText] = useState('')
@@ -42,8 +38,6 @@ export default function PostEdit() {
           return
         }
         setTitle(post.title)
-        setSlug(post.slug)
-        setSlugTouched(true)
         setContent(post.content)
         setLang(post.lang)
         setTagsText(post.tags.join(', '))
@@ -55,8 +49,12 @@ export default function PostEdit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isNew])
 
+  const titleInvalid = !TITLE_PATTERN.test(title)
+  const slug = slugify(title)
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    if (titleInvalid || !slug) return
     setSaving(true)
     setError(null)
     const tags = tagsText
@@ -64,8 +62,8 @@ export default function PostEdit() {
       .map((tag) => tag.trim())
       .filter(Boolean)
     const input = {
-      title,
-      slug: slug || slugify(title),
+      title: title.trim(),
+      slug,
       content,
       lang,
       tags,
@@ -95,37 +93,15 @@ export default function PostEdit() {
     <div>
       <h1 className="mb-6 text-2xl font-bold">{isNew ? t('admin_newPost') : t('admin_editPost')}</h1>
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label htmlFor="title" className="mb-1 block text-sm font-medium">
-              {t('admin_title')}
-            </label>
-            <input
-              id="title"
-              required
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value)
-                if (!slugTouched) setSlug(slugify(e.target.value))
-              }}
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="slug" className="mb-1 block text-sm font-medium">
-              {t('admin_slug')}
-            </label>
-            <input
-              id="slug"
-              required
-              value={slug}
-              onChange={(e) => {
-                setSlug(e.target.value)
-                setSlugTouched(true)
-              }}
-              className={inputClass}
-            />
-          </div>
+        <div>
+          <label htmlFor="title" className="mb-1 block text-sm font-medium">
+            {t('admin_title')}
+          </label>
+          <input id="title" required value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} />
+          {titleInvalid && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{t('admin_titleInvalid')}</p>}
+          <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
+            {t('admin_slug')}：{slug ? `/docs/${slug}` : '—'}
+          </p>
         </div>
         <div className="flex flex-wrap items-end gap-4">
           <div>
@@ -182,7 +158,7 @@ export default function PostEdit() {
         {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         <button
           type="submit"
-          disabled={saving}
+          disabled={saving || titleInvalid}
           className="rounded-lg bg-primary-600 px-6 py-2 text-sm font-medium text-white transition hover:bg-primary-700 disabled:opacity-50"
         >
           {saving ? t('admin_saving') : t('admin_save')}
