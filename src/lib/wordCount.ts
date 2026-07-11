@@ -1,9 +1,12 @@
-/** 計算文章字數：中日韓字元逐字計，其餘文字以空白分隔的單字計 */
+import { stripHtmlComments } from './markdown'
+
+/** 計算文章字數：中日韓字元逐字計，其餘文字以空白分隔的單字計；HTML 註解不列入 */
 const CJK_PATTERN = /[㐀-䶿一-鿿぀-ヿ가-힯]/g
 
 export function countWords(text: string): number {
-  const cjkCount = text.match(CJK_PATTERN)?.length ?? 0
-  const wordCount = text
+  const visible = stripHtmlComments(text)
+  const cjkCount = visible.match(CJK_PATTERN)?.length ?? 0
+  const wordCount = visible
     .replace(CJK_PATTERN, ' ')
     .split(/\s+/)
     .filter(Boolean).length

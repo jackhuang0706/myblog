@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { usePosts } from '../../hooks/usePosts'
+import { stripHtmlComments } from '../../lib/markdown'
 import { useI18n } from '../../i18n'
 
 /** 標題或摘要中命中的關鍵字加上高亮 */
@@ -31,7 +32,10 @@ export default function SearchBar() {
     if (!q) return []
     return posts
       .filter(
-        (p) => p.title.toLowerCase().includes(q) || p.content.toLowerCase().includes(q),
+        // 內容比對排除 HTML 註解，避免搜尋命中讀者看不到的文字
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          stripHtmlComments(p.content).toLowerCase().includes(q),
       )
       .slice(0, 8)
   }, [query, posts])

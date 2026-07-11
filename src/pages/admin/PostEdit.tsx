@@ -25,6 +25,9 @@ export default function PostEdit() {
   const [tagsText, setTagsText] = useState('')
   const [excerpt, setExcerpt] = useState('')
   const [published, setPublished] = useState(true)
+  // 原始標題與 slug：舊文章標題可能含現行規則不允許的字元，未改標題時沿用原值，避免儲存按鈕被鎖住
+  const [initialTitle, setInitialTitle] = useState<string | null>(null)
+  const [initialSlug, setInitialSlug] = useState<string | null>(null)
   const [loading, setLoading] = useState(!isNew)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -38,6 +41,8 @@ export default function PostEdit() {
           return
         }
         setTitle(post.title)
+        setInitialTitle(post.title)
+        setInitialSlug(post.slug)
         setContent(post.content)
         setLang(post.lang)
         setTagsText(post.tags.join(', '))
@@ -49,8 +54,9 @@ export default function PostEdit() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isNew])
 
-  const titleInvalid = !TITLE_PATTERN.test(title)
-  const slug = slugify(title)
+  const titleUnchanged = initialTitle !== null && title === initialTitle
+  const titleInvalid = !titleUnchanged && !TITLE_PATTERN.test(title)
+  const slug = titleUnchanged && initialSlug ? initialSlug : slugify(title)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -62,7 +68,7 @@ export default function PostEdit() {
       .map((tag) => tag.trim())
       .filter(Boolean)
     const input = {
-      title: title.trim(),
+      title: titleUnchanged ? title : title.trim(),
       slug,
       content,
       lang,

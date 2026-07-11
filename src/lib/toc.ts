@@ -1,3 +1,5 @@
+import { stripHtmlComments } from './markdown'
+
 export interface TocItem {
   id: string
   text: string
@@ -14,11 +16,11 @@ export function slugifyHeading(text: string): string {
     .slice(0, 80)
 }
 
-/** 從 Markdown 原文擷取標題（h1–h4），略過程式碼區塊 */
+/** 從 Markdown 原文擷取標題（h1–h4），略過程式碼區塊與 HTML 註解 */
 export function extractToc(markdown: string): TocItem[] {
   const items: TocItem[] = []
   let inCodeBlock = false
-  for (const line of markdown.split('\n')) {
+  for (const line of stripHtmlComments(markdown).split('\n')) {
     if (/^\s*(```|~~~)/.test(line)) {
       inCodeBlock = !inCodeBlock
       continue

@@ -37,7 +37,7 @@ export default function MarkdownEditor({ value, onChange }: Props) {
           rows={18}
           spellCheck={false}
           className="w-full resize-y bg-white p-4 font-mono text-sm outline-none dark:bg-gray-950"
-          placeholder="# 標題&#10;&#10;支援 Markdown 與數學式，例如 $E = mc^2$"
+          placeholder="# 標題&#10;&#10;支援 Markdown 與數學式，例如 $E = mc^2$&#10;&#10;<!-- HTML 註解不會顯示在文章中 -->&#10;&#10;<details>&#10;<summary>Toggle 標題</summary>&#10;&#10;收合的內容（支援 Markdown）&#10;&#10;</details>"
         />
       ) : (
         <div className="min-h-[24rem] bg-white p-4 dark:bg-gray-950">
