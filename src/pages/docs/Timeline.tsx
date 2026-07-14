@@ -33,7 +33,7 @@ export default function Timeline() {
                   {formatDate(post.created_at, lang)}
                 </time>
                 <Link
-                  to={`/docs/${post.slug}`}
+                  to={`/docs/${encodeURIComponent(post.slug)}`}
                   className="mt-0.5 block font-medium hover:text-primary-600 dark:hover:text-primary-100"
                 >
                   {post.title}

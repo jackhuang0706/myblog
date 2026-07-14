@@ -72,7 +72,7 @@ export default function SearchBar() {
               {results.map((post) => (
                 <li key={post.id}>
                   <Link
-                    to={`/docs/${post.slug}`}
+                    to={`/docs/${encodeURIComponent(post.slug)}`}
                     onClick={() => {
                       setOpen(false)
                       setQuery('')

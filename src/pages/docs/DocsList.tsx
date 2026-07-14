@@ -20,7 +20,7 @@ export default function DocsList() {
           {posts.map((post) => (
             <li key={post.id}>
               <Link
-                to={`/docs/${post.slug}`}
+                to={`/docs/${encodeURIComponent(post.slug)}`}
                 className="flex h-full flex-col rounded-xl border border-gray-200 p-5 transition hover:border-primary-500 hover:shadow-md dark:border-gray-800 dark:hover:border-primary-500"
               >
                 <h2 className="font-semibold">{post.title}</h2>

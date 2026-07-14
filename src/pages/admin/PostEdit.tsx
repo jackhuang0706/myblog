@@ -5,10 +5,10 @@ import MarkdownEditor from '../../components/editor/MarkdownEditor'
 import { useI18n, languageNames } from '../../i18n'
 import type { Language } from '../../types'
 
-// 標題只允許中文、英文字母、數字與空格
-const TITLE_PATTERN = /^[\p{Script=Han}A-Za-z0-9\s]*$/u
+// 標題只允許中文與 ASCII 可見字元（\x20-\x7E：英文、數字、符號與空格）
+const TITLE_PATTERN = /^[\p{Script=Han}\x20-\x7E]*$/u
 
-/** slug 由標題自動產生（不可自訂）：中文與數字照抄、英文轉小寫、空格以 - 連接 */
+/** slug 由標題自動產生（不可自訂）：中文、數字與其他符號照抄、英文轉小寫、空格以 - 連接 */
 function slugify(title: string): string {
   return title.trim().toLowerCase().replace(/\s+/g, '-')
 }
@@ -55,7 +55,9 @@ export default function PostEdit() {
   }, [id, isNew])
 
   const titleUnchanged = initialTitle !== null && title === initialTitle
-  const titleInvalid = !titleUnchanged && !TITLE_PATTERN.test(title)
+  // 全空白的標題會產生空 slug，也視為無效，避免按下儲存卻毫無反應
+  const titleInvalid =
+    !titleUnchanged && title !== '' && (!TITLE_PATTERN.test(title) || title.trim() === '')
   const slug = titleUnchanged && initialSlug ? initialSlug : slugify(title)
 
   const handleSubmit = async (e: FormEvent) => {
@@ -84,7 +86,9 @@ export default function PostEdit() {
       }
       navigate('/admin/posts')
     } catch (err) {
-      setError((err as Error).message)
+      const message = (err as Error).message
+      // slug 有 unique 約束：改標題撞到既有文章的 slug 時，給明確提示而不是原始資料庫錯誤
+      setError(/duplicate key value|23505/.test(message) ? t('admin_slugConflict') : message)
     } finally {
       setSaving(false)
     }

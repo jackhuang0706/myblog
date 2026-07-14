@@ -45,4 +45,4 @@ docs-site/
 - 後台根據當天發布的總字數顯示 Contribution Heatmap
 - topbar 新增 旅行紀錄 button，並連接到 travelrecorder.fijjj.dev
 - 中文字體使用 noto serif traditional chinese，英文使用serif font
-- 網址slug根據標題而變化（不可自訂），中文和數字照抄，英文全換小寫，空格使用-符號連接。而標題只允許有中文或英文字、數字、空格。
+- 網址slug根據標題而變化（不可自訂），中文,數字和其他符號照抄，英文全換小寫，空格使用-符號連接。標題只允許出現ascii的可見字元。
