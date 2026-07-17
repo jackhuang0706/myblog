@@ -5,7 +5,7 @@ export const samplePosts: Post[] = [
   {
     id: 'sample-1',
     slug: 'welcome',
-    title: '歡迎來到我的文件站',
+    title: '歡迎來到我的文章站',
     lang: 'zh',
     tags: ['公告', '入門'],
     excerpt: '網站功能總覽：Markdown、數學式、主題切換、搜尋與後台管理。',
@@ -15,7 +15,7 @@ export const samplePosts: Post[] = [
     updated_at: '2026-07-01T09:00:00Z',
     content: `# 歡迎 👋
 
-這是一個以 **Markdown** 為主的個人文件網站，支援：
+這是一個以 **Markdown** 為主的個人文章網站，支援：
 
 - 淺色 / 深色主題切換
 - 中文與英文介面

@@ -28,7 +28,7 @@ docs-site/
 └── package.json
 # 專案特色
 - 網站風格：現代化與科技感
-- 網站以markdown為主呈現，包含數學式的mathtex正確渲染
+- 網站以markdown為主呈現，包含數學式的mathtex正確渲染，以及圖片、影音檔案的支援，檔案的支援在編寫markdown時可以上傳，並且自動載入markdown語法形式（![]()），讓使用者能自由決定放在文章的哪個位置
 - 支援淺色與深色切換，預設淺色
 - 支援可以新增多語言的功能，預設中文，中文的文章只在中文頁面呈現，英文也一樣
 - 支援網站搜尋功能(關鍵字搜尋內容及標題)
@@ -44,5 +44,5 @@ docs-site/
 - 後台的文章管理顯示每篇文章的瀏覽數
 - 後台根據當天發布的總字數顯示 Contribution Heatmap
 - topbar 新增 旅行紀錄 button，並連接到 travelrecorder.fijjj.dev
-- 中文字體使用 noto serif traditional chinese，英文使用serif font
+- 中文字體使用 Noto Sans Traditional Chinese，英文使用Libre Baskerville
 - 網址slug根據標題而變化（不可自訂），中文,數字和其他符號照抄，英文全換小寫，空格使用-符號連接。標題只允許出現ascii的可見字元。

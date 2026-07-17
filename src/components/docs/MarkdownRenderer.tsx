@@ -55,6 +55,36 @@ function makeHeading(Tag: 'h1' | 'h2' | 'h3' | 'h4') {
   }
 }
 
+const VIDEO_EXTENSIONS = /\.(mp4|webm|ogv|mov)$/i
+const AUDIO_EXTENSIONS = /\.(mp3|wav|ogg|m4a|aac|flac)$/i
+
+/** 取出 URL 的路徑部分（去除 query string 與 hash），供副檔名判斷 */
+function urlPath(src: string): string {
+  return src.split(/[?#]/)[0]
+}
+
+// 圖片語法 ![](url) 也支援影音檔案：依副檔名自動轉為 video / audio 播放器
+function MediaOrImage({ src = '', alt = '' }: { src?: string; alt?: string }) {
+  const path = urlPath(src)
+  if (VIDEO_EXTENSIONS.test(path)) {
+    return (
+      <video controls preload="metadata" className="my-4 w-full rounded-lg" aria-label={alt || undefined}>
+        <source src={src} />
+        {alt}
+      </video>
+    )
+  }
+  if (AUDIO_EXTENSIONS.test(path)) {
+    return (
+      <audio controls preload="metadata" className="my-4 w-full" aria-label={alt || undefined}>
+        <source src={src} />
+        {alt}
+      </audio>
+    )
+  }
+  return <img src={src} alt={alt} loading="lazy" className="rounded-lg" />
+}
+
 // toggle list：<details>/<summary> 樣式（原生開合行為，無需 JS）
 function Details({ node: _node, children, ...props }: JSX.IntrinsicElements['details'] & { node?: unknown }) {
   return (
@@ -78,6 +108,15 @@ function Summary({ node: _node, children, ...props }: JSX.IntrinsicElements['sum
   )
 }
 
+// 直接寫 HTML 標籤嵌入的影音也套用相同樣式
+function Video({ node: _node, ...props }: JSX.IntrinsicElements['video'] & { node?: unknown }) {
+  return <video controls preload="metadata" className="my-4 w-full rounded-lg" {...props} />
+}
+
+function Audio({ node: _node, ...props }: JSX.IntrinsicElements['audio'] & { node?: unknown }) {
+  return <audio controls preload="metadata" className="my-4 w-full" {...props} />
+}
+
 const components = {
   h1: makeHeading('h1'),
   h2: makeHeading('h2'),
@@ -85,6 +124,9 @@ const components = {
   h4: makeHeading('h4'),
   details: Details,
   summary: Summary,
+  img: MediaOrImage,
+  video: Video,
+  audio: Audio,
 }
 
 export default function MarkdownRenderer({ content }: { content: string }) {

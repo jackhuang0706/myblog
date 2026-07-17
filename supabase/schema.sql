@@ -85,3 +85,41 @@ grant execute on function public.increment_post_views(text) to anon, authenticat
 -- 搜尋效能（關鍵字搜尋標題與內容）
 create index if not exists posts_title_content_idx
   on public.posts using gin (to_tsvector('simple', title || ' ' || content));
+
+-- ============================================================
+-- 編輯器檔案上傳（圖片／影片）：公開讀取的 media bucket，僅登入使用者可上傳
+-- 只允許 jpg / jpeg / png / mp4 / mov（由 bucket 的 allowed_mime_types 在伺服器端強制）
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'media',
+  'media',
+  true,
+  52428800, -- 50 MB
+  array['image/jpeg', 'image/png', 'video/mp4', 'video/quicktime']
+)
+on conflict (id) do update
+  set public = true,
+      file_size_limit = excluded.file_size_limit,
+      allowed_mime_types = excluded.allowed_mime_types;
+
+-- storage.objects 的 policy 在部分專案無法由 SQL Editor 建立（must be owner of table objects）。
+-- 包在例外處理中，避免整份 schema 執行失敗回滾、連 bucket 都沒建立。
+-- 若看到下方的 NOTICE，請改用 Dashboard 建立 policy：
+--   Storage → Policies → media bucket → New policy →
+--   允許 authenticated 角色 INSERT（及 DELETE），target: objects，無額外條件即可。
+do $$
+begin
+  drop policy if exists "Authenticated users can upload media" on storage.objects;
+  create policy "Authenticated users can upload media"
+    on storage.objects for insert
+    to authenticated
+    with check (bucket_id = 'media');
+
+  drop policy if exists "Authenticated users can delete media" on storage.objects;
+  create policy "Authenticated users can delete media"
+    on storage.objects for delete
+    to authenticated
+    using (bucket_id = 'media');
+exception when insufficient_privilege then
+  raise notice 'Could not create storage policies via SQL. Create them in Dashboard: Storage -> Policies -> media -> allow INSERT/DELETE for authenticated.';
+end $$;
