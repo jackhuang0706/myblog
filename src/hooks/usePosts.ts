@@ -87,6 +87,40 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   return data ? normalizePost(data) : null
 }
 
+export interface AdjacentPosts {
+  /** 上一篇：同語言中發布時間較早的最近一篇 */
+  prev: Post | null
+  /** 下一篇：同語言中發布時間較晚的最近一篇 */
+  next: Post | null
+}
+
+/** 取得文章頁底部「上一篇／下一篇」連結所需的相鄰文章（限同語言、已發布） */
+export async function getAdjacentPosts(post: Post): Promise<AdjacentPosts> {
+  if (!supabase) {
+    const list = samplePosts
+      .filter((p) => p.lang === post.lang)
+      .sort((a, b) => a.created_at.localeCompare(b.created_at))
+    const idx = list.findIndex((p) => p.slug === post.slug)
+    if (idx === -1) return { prev: null, next: null }
+    return {
+      prev: idx > 0 ? list[idx - 1] : null,
+      next: idx < list.length - 1 ? list[idx + 1] : null,
+    }
+  }
+  const base = () =>
+    supabase!.from('posts').select('*').eq('published', true).eq('lang', post.lang)
+  const [prevRes, nextRes] = await Promise.all([
+    base().lt('created_at', post.created_at).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+    base().gt('created_at', post.created_at).order('created_at', { ascending: true }).limit(1).maybeSingle(),
+  ])
+  if (prevRes.error) throw prevRes.error
+  if (nextRes.error) throw nextRes.error
+  return {
+    prev: prevRes.data ? normalizePost(prevRes.data) : null,
+    next: nextRes.data ? normalizePost(nextRes.data) : null,
+  }
+}
+
 export async function getPostById(id: string): Promise<Post | null> {
   if (!supabase) return null
   const { data, error } = await supabase.from('posts').select('*').eq('id', id).maybeSingle()

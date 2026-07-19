@@ -46,3 +46,4 @@ docs-site/
 - topbar 新增 旅行紀錄 button，並連接到 travelrecorder.fijjj.dev
 - 中文字體使用 Noto Sans Traditional Chinese，英文使用Libre Baskerville
 - 網址slug根據標題而變化（不可自訂），中文,數字和其他符號照抄，英文全換小寫，空格使用-符號連接。標題只允許出現ascii的可見字元。
+- 每篇文章頁最下方有上一篇與下一篇文章的連結，連結以區塊方式呈現，區塊顯示箭頭，"上一篇"或"下一篇"的文字，以及上一篇和下一篇的標題，兩個block等高，左右分佈各佔一半，如果沒有上一篇或下一篇則另外一半維持原本的高度與寬度。

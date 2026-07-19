@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getPostBySlug, incrementPostViews } from '../../hooks/usePosts'
+import { getAdjacentPosts, getPostBySlug, incrementPostViews, type AdjacentPosts } from '../../hooks/usePosts'
 import type { Post } from '../../types'
 import MarkdownRenderer from '../../components/docs/MarkdownRenderer'
+import PostNav from '../../components/docs/PostNav'
 import TableOfContents from '../../components/docs/TableOfContents'
 import { useI18n } from '../../i18n'
 import { formatDate } from '../../lib/format'
@@ -11,15 +12,23 @@ export default function DocPage() {
   const { slug } = useParams<{ slug: string }>()
   const { t, lang } = useI18n()
   const [post, setPost] = useState<Post | null>(null)
+  const [adjacent, setAdjacent] = useState<AdjacentPosts>({ prev: null, next: null })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!slug) return
     setLoading(true)
+    setAdjacent({ prev: null, next: null })
     getPostBySlug(slug)
       .then((p) => {
         setPost(p)
-        if (p) incrementPostViews(slug)
+        if (p) {
+          incrementPostViews(slug)
+          // 相鄰文章載入失敗只影響底部導覽，不影響閱讀
+          getAdjacentPosts(p)
+            .then(setAdjacent)
+            .catch(() => setAdjacent({ prev: null, next: null }))
+        }
       })
       .catch(() => setPost(null))
       .finally(() => setLoading(false))
@@ -75,6 +84,7 @@ export default function DocPage() {
           </div>
         </details>
         <MarkdownRenderer content={post.content} />
+        <PostNav prev={adjacent.prev} next={adjacent.next} />
       </article>
       {/* 文章目錄：由 Markdown 標題自動生成，桌面版固定在右側 */}
       <aside className="hidden w-56 shrink-0 lg:block">
